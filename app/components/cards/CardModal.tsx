@@ -14,16 +14,44 @@ type FieldErrors = {
   expiryYear?: string;
 };
 
+type FormValues = {
+  name: string;
+  number: string;
+  expiryMonth: string;
+  expiryYear: string;
+};
+
+const initialFormValues: FormValues = {
+  name: "",
+  number: "",
+  expiryMonth: "",
+  expiryYear: "",
+};
+
 export function CardModal({ isOpen, onClose }: CardModalProps) {
   const fetcher = useFetcher();
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const isSubmitting = fetcher.state === "submitting";
+
+  // 全ての値が入力されているかチェック
+  const isFormValid =
+    formValues.name.trim() !== "" &&
+    formValues.number.trim() !== "" &&
+    formValues.expiryMonth.trim() !== "" &&
+    formValues.expiryYear.trim() !== "";
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
 
   // 送信成功時にモーダルを閉じる
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data?.success) {
       setErrors({});
+      setFormValues(initialFormValues);
       formRef.current?.reset();
       onClose();
     }
@@ -119,6 +147,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               id="name"
               name="name"
               placeholder="例: メインカード"
+              value={formValues.name}
+              onChange={handleInputChange}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
                 errors.name
                   ? "border-red-500"
@@ -144,6 +174,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               name="number"
               placeholder="1234567890123456"
               maxLength={16}
+              value={formValues.number}
+              onChange={handleInputChange}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono ${
                 errors.number
                   ? "border-red-500"
@@ -168,6 +200,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   name="expiryMonth"
                   placeholder="MM"
                   maxLength={2}
+                  value={formValues.expiryMonth}
+                  onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${
                     errors.expiryMonth
                       ? "border-red-500"
@@ -190,6 +224,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   name="expiryYear"
                   placeholder="YY"
                   maxLength={2}
+                  value={formValues.expiryYear}
+                  onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${
                     errors.expiryYear
                       ? "border-red-500"
@@ -216,7 +252,7 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={!isFormValid || isSubmitting}
               className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? "登録中..." : "登録"}
