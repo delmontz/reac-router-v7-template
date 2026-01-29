@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
-import { cardSchema } from "~/schemas";
 
 type CardModalProps = {
   isOpen: boolean;
@@ -71,25 +70,6 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get("name") as string,
-      number: formData.get("number") as string,
-      expiryMonth: formData.get("expiryMonth") as string,
-      expiryYear: formData.get("expiryYear") as string,
-    };
-
-    // クライアントサイドバリデーション
-    const result = cardSchema.safeParse(data);
-    if (!result.success) {
-      const fieldErrors: FieldErrors = {};
-      result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FieldErrors;
-        fieldErrors[field] = issue.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-
     setErrors({});
     fetcher.submit(formData, { method: "post" });
   };
@@ -156,8 +136,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               data-error={!!errors.name}
               aria-invalid={!!errors.name}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${errors.name
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
+                ? "border-red-500"
+                : "border-gray-300 dark:border-gray-600"
                 }`}
             />
             {errors.name && (
@@ -184,8 +164,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               data-error={!!errors.number}
               aria-invalid={!!errors.number}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono ${errors.number
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
+                ? "border-red-500"
+                : "border-gray-300 dark:border-gray-600"
                 }`}
             />
             {errors.number && (
@@ -211,8 +191,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   data-error={!!errors.expiryMonth}
                   aria-invalid={!!errors.expiryMonth}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${errors.expiryMonth
-                      ? "border-red-500"
-                      : "border-gray-300 dark:border-gray-600"
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                     }`}
                 />
                 {errors.expiryMonth && (
@@ -236,8 +216,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   data-error={!!errors.expiryYear}
                   aria-invalid={!!errors.expiryYear}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${errors.expiryYear
-                      ? "border-red-500"
-                      : "border-gray-300 dark:border-gray-600"
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                     }`}
                 />
                 {errors.expiryYear && (
