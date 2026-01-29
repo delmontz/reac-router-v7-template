@@ -11,10 +11,13 @@
   "dependencies": {
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
+    "axios": "^1.13.4",
     "isbot": "^5.1.31",
+    "msw": "^2.12.7",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router": "7.12.0"
+    "react-router": "7.12.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@react-router/dev": "7.12.0",
@@ -26,5 +29,10 @@
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
