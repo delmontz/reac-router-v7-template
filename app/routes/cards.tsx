@@ -5,7 +5,7 @@ import { cardSchema } from "~/schemas";
 import type { Card, CardInput } from "~/types";
 import { CardList, CardModal } from "~/components/cards";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "カード一覧" },
     { name: "description", content: "カード一覧ページ" },
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 // クライアントサイドでデータ取得
-export async function clientLoader({}: Route.ClientLoaderArgs) {
+export async function clientLoader({ }: Route.ClientLoaderArgs) {
   const response = await api.get<Card[]>("/cards");
   return { cards: response.data };
 }
