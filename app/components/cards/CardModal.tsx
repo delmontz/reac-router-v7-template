@@ -45,6 +45,10 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
+    // 入力変更時に該当フィールドのエラーをクリア
+    if (errors[name as keyof FieldErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   // 送信成功時にモーダルを閉じる
@@ -59,8 +63,8 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
 
   // サーバーからのエラーを表示
   useEffect(() => {
-    if (fetcher.data?.errors) {
-      setErrors(fetcher.data.errors);
+    if (fetcher.data?.fieldErrors) {
+      setErrors(fetcher.data.fieldErrors);
     }
   }, [fetcher.data]);
 
@@ -149,11 +153,12 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               placeholder="例: メインカード"
               value={formValues.name}
               onChange={handleInputChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                errors.name
+              data-error={!!errors.name}
+              aria-invalid={!!errors.name}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white ${errors.name
                   ? "border-red-500"
                   : "border-gray-300 dark:border-gray-600"
-              }`}
+                }`}
             />
             {errors.name && (
               <p className="mt-1 text-sm text-red-500">{errors.name}</p>
@@ -176,11 +181,12 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
               maxLength={16}
               value={formValues.number}
               onChange={handleInputChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono ${
-                errors.number
+              data-error={!!errors.number}
+              aria-invalid={!!errors.number}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono ${errors.number
                   ? "border-red-500"
                   : "border-gray-300 dark:border-gray-600"
-              }`}
+                }`}
             />
             {errors.number && (
               <p className="mt-1 text-sm text-red-500">{errors.number}</p>
@@ -202,11 +208,12 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   maxLength={2}
                   value={formValues.expiryMonth}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${
-                    errors.expiryMonth
+                  data-error={!!errors.expiryMonth}
+                  aria-invalid={!!errors.expiryMonth}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${errors.expiryMonth
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
-                  }`}
+                    }`}
                 />
                 {errors.expiryMonth && (
                   <p className="mt-1 text-sm text-red-500">
@@ -226,11 +233,12 @@ export function CardModal({ isOpen, onClose }: CardModalProps) {
                   maxLength={2}
                   value={formValues.expiryYear}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${
-                    errors.expiryYear
+                  data-error={!!errors.expiryYear}
+                  aria-invalid={!!errors.expiryYear}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-center ${errors.expiryYear
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
-                  }`}
+                    }`}
                 />
                 {errors.expiryYear && (
                   <p className="mt-1 text-sm text-red-500">
